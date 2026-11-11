@@ -1,0 +1,411 @@
+.k-sim {
+  position: relative;
+  padding: 6.5rem 2.5rem;
+  background:
+    radial-gradient(1000px 550px at 18% 50%, rgba(255, 85, 32, 0.09), transparent 72%),
+    linear-gradient(180deg, #080f15 0%, #0d1822 50%, #070d12 100%);
+  border-top: 1px solid rgba(154, 209, 230, 0.12);
+}
+
+.k-sim__container {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.k-sim__header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 3.2rem;
+}
+
+.k-sim__board {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.k-sim__feed-panel,
+.k-sim__calc-panel {
+  border-radius: 26px;
+  padding: 1.85rem;
+  background: linear-gradient(160deg, rgba(24, 43, 57, 0.55) 0%, rgba(10, 19, 27, 0.9) 100%);
+  border: 1px solid rgba(154, 209, 230, 0.22);
+  box-shadow:
+    0 24px 55px rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px rgba(255, 255, 255, 0.16);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.4rem;
+}
+
+.k-sim__panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(154, 209, 230, 0.14);
+}
+
+.k-sim__panel-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.k-sim__live-beacon {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff5520;
+  box-shadow: 0 0 12px #ff5520;
+}
+
+.k-sim__panel-title {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #9ad1e6;
+}
+
+.k-sim__radius-tag,
+.k-sim__demand-pill {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0.24rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(230, 182, 76, 0.14);
+  border: 1px solid rgba(230, 182, 76, 0.36);
+  color: #ffe082;
+}
+
+.k-sim__deal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.k-sim__deal-card {
+  width: 100%;
+  text-align: left;
+  padding: 1.15rem 1.25rem;
+  border-radius: 18px;
+  background: rgba(9, 17, 24, 0.72);
+  border: 1px solid rgba(154, 209, 230, 0.15);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.k-sim__deal-card:hover {
+  border-color: rgba(154, 209, 230, 0.38);
+  background: rgba(16, 30, 42, 0.85);
+}
+
+.k-sim__deal-card--active {
+  border-color: #ff5520;
+  background: linear-gradient(135deg, rgba(42, 32, 34, 0.65), rgba(14, 26, 36, 0.92));
+  box-shadow: 0 10px 26px rgba(255, 85, 32, 0.18);
+}
+
+.k-sim__deal-top {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #9ad1e6;
+  margin-bottom: 0.35rem;
+}
+
+.k-sim__deal-time {
+  color: #69f0ae;
+}
+
+.k-sim__deal-name {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: #ffffff;
+}
+
+.k-sim__deal-meta {
+  font-size: 0.78rem;
+  color: rgba(206, 222, 233, 0.68);
+  margin: 0 0 0.85rem;
+}
+
+.k-sim__deal-pricing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(154, 209, 230, 0.1);
+}
+
+.k-sim__price-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.k-sim__price-lbl {
+  font-size: 0.66rem;
+  color: rgba(206, 222, 233, 0.6);
+}
+
+.k-sim__price-val {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.k-sim__price-val--gold {
+  color: #ffe082;
+}
+
+.k-sim__price-arrow {
+  color: #ff5520;
+  font-weight: 700;
+}
+
+.k-sim__spread-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  color: #69f0ae;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(105, 240, 174, 0.35);
+}
+
+/* Muse AI Dispatch Box */
+.k-sim__muse-box {
+  padding: 1.15rem 1.25rem;
+  border-radius: 18px;
+  background: rgba(8, 15, 22, 0.88);
+  border: 1px solid rgba(230, 182, 76, 0.32);
+}
+
+.k-sim__muse-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.k-sim__muse-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #ffe082;
+}
+
+.k-sim__muse-velocity {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #9ad1e6;
+}
+
+.k-sim__muse-msg {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: rgba(232, 242, 248, 0.86);
+  font-style: italic;
+  margin: 0 0 0.85rem;
+}
+
+.k-sim__dispatch-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(230, 182, 76, 0.55);
+  background: linear-gradient(135deg, rgba(255, 85, 32, 0.25), rgba(230, 182, 76, 0.25));
+  color: #ffe494;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.k-sim__dispatch-btn:hover {
+  background: linear-gradient(135deg, #ff5520, #e6b64c);
+  color: #081017;
+}
+
+.k-sim__dispatch-btn--sent {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #69f0ae;
+  color: #69f0ae;
+}
+
+/* Right Ledger & Sliders */
+.k-sim__ledger-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+.k-sim__ledger-item {
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  background: rgba(8, 16, 23, 0.75);
+  border: 1px solid rgba(154, 209, 230, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.k-sim__ledger-lbl {
+  font-size: 0.76rem;
+  color: rgba(206, 222, 233, 0.68);
+}
+
+.k-sim__ledger-val {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.k-sim__ledger-val--pos {
+  color: #69f0ae;
+}
+
+.k-sim__ledger-val--warn {
+  color: #ffe082;
+}
+
+.k-sim__sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: 18px;
+  background: rgba(9, 17, 24, 0.65);
+  border: 1px solid rgba(154, 209, 230, 0.14);
+}
+
+.k-sim__slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.k-sim__slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  color: rgba(232, 242, 248, 0.88);
+}
+
+.k-sim__slider-readout {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: #ffe082;
+}
+
+.k-sim__range {
+  width: 100%;
+  accent-color: #ff5520;
+  cursor: pointer;
+}
+
+.k-sim__roi-summary {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 1rem;
+}
+
+.k-sim__roi-col {
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: rgba(9, 17, 24, 0.82);
+  border: 1px solid rgba(154, 209, 230, 0.18);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.45rem;
+}
+
+.k-sim__roi-col--highlight {
+  background: linear-gradient(145deg, rgba(46, 82, 102, 0.55), rgba(14, 26, 36, 0.95));
+  border-color: rgba(230, 182, 76, 0.55);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.k-sim__roi-caption {
+  font-size: 0.75rem;
+  color: rgba(212, 228, 238, 0.72);
+}
+
+.k-sim__roi-single {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.k-sim__roi-note {
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: #69f0ae;
+}
+
+.k-sim__roi-monthly {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #ffe082;
+}
+
+.k-sim__roi-monthly small {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 224, 130, 0.75);
+}
+
+.k-sim__roi-cta {
+  margin-top: 0.35rem;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #ff5520, #e6b64c);
+  color: #081017;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.k-sim__roi-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(255, 85, 32, 0.38);
+}
+
+@media (max-width: 1024px) {
+  .k-sim__board {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .k-sim {
+    padding: 4.5rem 1.25rem;
+  }
+
+  .k-sim__ledger-grid,
+  .k-sim__roi-summary {
+    grid-template-columns: 1fr;
+  }
+}
+

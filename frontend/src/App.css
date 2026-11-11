@@ -1,0 +1,10 @@
+.k-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #070b0f;
+}
+
+.k-app__main {
+  flex: 1;
+}

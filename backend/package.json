@@ -1,0 +1,12 @@
+{
+  "name": "kommandros-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Placeholder backend directory for Kommandr OS API services",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  }
+}
+

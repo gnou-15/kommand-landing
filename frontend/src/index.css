@@ -1,0 +1,74 @@
+:root {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: #070b0f;
+  color: #f0f6fa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Shared Section Typography Utilities */
+.k-section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.34rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(23, 44, 58, 0.68);
+  border: 1px solid rgba(154, 209, 230, 0.25);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #9ad1e6;
+  margin-bottom: 1.1rem;
+}
+
+.k-section-tag__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5520;
+  box-shadow: 0 0 10px #ff5520;
+}
+
+.k-section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 3.05rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  margin: 0 0 1rem;
+}
+
+.k-text-gradient {
+  background: linear-gradient(92deg, #ffe082 0%, #ff7043 52%, #9ad1e6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.k-section-subtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: rgba(210, 226, 236, 0.74);
+  margin: 0 auto;
+}

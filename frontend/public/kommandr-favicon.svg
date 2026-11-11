@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 132" fill="none">
+  <defs>
+    <linearGradient id="shieldBg" x1="60" y1="8" x2="60" y2="126" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1A2C38" />
+      <stop offset="55%" stop-color="#0D1821" />
+      <stop offset="100%" stop-color="#070D12" />
+    </linearGradient>
+    <linearGradient id="sofaLeft" x1="20" y1="12" x2="60" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3B4F5E" />
+      <stop offset="100%" stop-color="#22313D" />
+    </linearGradient>
+    <linearGradient id="sofaRight" x1="60" y1="12" x2="100" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#162634" />
+      <stop offset="100%" stop-color="#0B151E" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="18" y1="60" x2="102" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFE082" />
+      <stop offset="35%" stop-color="#E5B84B" />
+      <stop offset="70%" stop-color="#C6922C" />
+      <stop offset="100%" stop-color="#F5D061" />
+    </linearGradient>
+    <linearGradient id="emberGlow" x1="60" y1="45" x2="60" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF5722" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#E5B84B" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Shield / Sofa Crest Silhouette -->
+  <path
+    d="M25 18C25 11.9249 29.9249 7 36 7H55C57.7614 7 60 9.23858 60 12C60 9.23858 62.2386 7 65 7H84C90.0751 7 95 11.9249 95 18V25C101.627 25 107 30.3726 107 37C107 41.8434 104.131 46.017 100 47.9196V93.5L60 124L20 93.5V47.9196C15.8689 46.017 13 41.8434 13 37C13 30.3726 18.3726 25 25 25V18Z"
+    fill="url(#shieldBg)"
+    stroke="#2E4756"
+    stroke-width="2.5"
+  />
+
+  <!-- Left Sofa Back Cushion -->
+  <path
+    d="M29 19C29 14.5817 32.5817 11 37 11H54C56.7614 11 59 13.2386 59 16V38H29V19Z"
+    fill="url(#sofaLeft)"
+  />
+
+  <!-- Right Sofa Back Cushion -->
+  <path
+    d="M61 16C61 13.2386 63.2386 11 66 11H83C87.4183 11 91 14.5817 91 19V38H61V16Z"
+    fill="url(#sofaRight)"
+  />
+
+  <!-- Sofa Armrests & Seat Deck -->
+  <path
+    d="M24 29C19.5817 29 16 32.5817 16 37C16 40.866 18.7423 44.0899 22.3902 44.8369L24 45.1665V56H31V42C31 39.7909 32.7909 38 35 38H85C87.2091 38 89 39.7909 89 42V56H96V45.1665L97.6098 44.8369C101.258 44.0899 104 40.866 104 37C104 32.5817 100.418 29 96 29H92V36H28V29H24Z"
+    fill="#13222E"
+    stroke="#4C687A"
+    stroke-width="1.5"
+  />
+
+  <!-- Seat Cushion Highlight Bar -->
+  <rect x="33" y="41" width="54" height="8" rx="3" fill="#3B4F5E" />
+
+  <!-- Subtle Core Glow Under Star -->
+  <circle cx="60" cy="64" r="18" fill="url(#emberGlow)" />
+
+  <!-- Commander Star -->
+  <path
+    d="M60 49L63.3677 59.3647H74.2658L65.4491 65.7705L68.8168 76.1353L60 69.7295L51.1832 76.1353L54.5509 65.7705L45.7342 59.3647H56.6323L60 49Z"
+    fill="url(#goldGrad)"
+  />
+
+  <!-- Gold Rank Chevron 1 (Top) -->
+  <path
+    d="M23 64L60 91.5L97 64V73.5L60 101L23 73.5V64Z"
+    fill="url(#goldGrad)"
+  />
+
+  <!-- Gold Rank Chevron 2 (Middle) -->
+  <path
+    d="M23 77.5L60 105L97 77.5V87L60 114.5L23 87V77.5Z"
+    fill="url(#goldGrad)"
+  />
+
+  <!-- Gold Rank Chevron 3 (Bottom) -->
+  <path
+    d="M23 91L60 118.5L97 91V99.5L60 127L23 99.5V91Z"
+    fill="url(#goldGrad)"
+  />
+</svg>
+
