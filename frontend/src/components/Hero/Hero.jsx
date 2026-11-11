@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { HERO_CALLOUTS } from '../../data/kommandrData';
+import ScrollReveal from '../ScrollReveal/ScrollReveal';
 import './Hero.css';
 
 export function Hero({ onOpenModal }) {
@@ -416,78 +417,86 @@ export function Hero({ onOpenModal }) {
         </div>
 
         {/* HORIZONTAL GLOWING AXIS DIVIDER WITH PULSING CENTER NODE (Exact TechCool Signature) */}
-        <div className="k-hero__horizon" aria-hidden="true">
-          <div className="k-hero__horizon-line" />
-          <div className="k-hero__horizon-node">
-            <span className="k-hero__horizon-ring" />
-            <span className="k-hero__horizon-dot" />
+        <ScrollReveal variant="scale-up" delay={80}>
+          <div className="k-hero__horizon" aria-hidden="true">
+            <div className="k-hero__horizon-line" />
+            <div className="k-hero__horizon-node">
+              <span className="k-hero__horizon-ring" />
+              <span className="k-hero__horizon-dot" />
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* SUB-HERO 3-COLUMN BAR (360° Monolith | Center Headline + DISCOVER NOW | Specialist Avatar Quote) */}
         <div id="command-center" className="k-hero__subbar">
           {/* Left: 3D Vertical Command Monolith with 360° Orbit Ring */}
-          <div className="k-hero__monolith-wrap">
-            <div className="k-hero__monolith">
-              <div className="k-hero__monolith-cap" />
-              <div className="k-hero__monolith-body">
-                <div className="k-hero__monolith-face k-hero__monolith-face--left">
-                  <span className="k-hero__monolith-led" />
-                  <span className="k-hero__monolith-led" />
-                  <span className="k-hero__monolith-led" />
+          <ScrollReveal variant="fade-left" delay={100}>
+            <div className="k-hero__monolith-wrap">
+              <div className="k-hero__monolith">
+                <div className="k-hero__monolith-cap" />
+                <div className="k-hero__monolith-body">
+                  <div className="k-hero__monolith-face k-hero__monolith-face--left">
+                    <span className="k-hero__monolith-led" />
+                    <span className="k-hero__monolith-led" />
+                    <span className="k-hero__monolith-led" />
+                  </div>
+                  <div className="k-hero__monolith-core-slit" />
+                  <div className="k-hero__monolith-face k-hero__monolith-face--right">
+                    <span className="k-hero__monolith-tag">KONNECT</span>
+                  </div>
                 </div>
-                <div className="k-hero__monolith-core-slit" />
-                <div className="k-hero__monolith-face k-hero__monolith-face--right">
-                  <span className="k-hero__monolith-tag">KONNECT</span>
+                {/* 360° Cyan/Teal Orbit Ring */}
+                <div className="k-hero__orbit-ring">
+                  <span className="k-hero__orbit-badge">360°</span>
                 </div>
-              </div>
-              {/* 360° Cyan/Teal Orbit Ring */}
-              <div className="k-hero__orbit-ring">
-                <span className="k-hero__orbit-badge">360°</span>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Center: Explore Rapid Flipping Technology + DISCOVER NOW */}
-          <div className="k-hero__subcenter">
-            <h2 className="k-hero__subcenter-title">
-              Explore Rapid
-              <br />
-              Flipping Technology
-            </h2>
-            <a href="#lifecycle" className="k-hero__discover-link">
-              DISCOVER NOW
-            </a>
-          </div>
+          <ScrollReveal variant="fade-up" delay={180}>
+            <div className="k-hero__subcenter">
+              <h2 className="k-hero__subcenter-title">
+                Explore Rapid
+                <br />
+                Flipping Technology
+              </h2>
+              <a href="#lifecycle" className="k-hero__discover-link">
+                DISCOVER NOW
+              </a>
+            </div>
+          </ScrollReveal>
 
           {/* Right: Avatar Badge + Bold Highlighted Blurb */}
-          <div className="k-hero__subright">
-            <div className="k-hero__avatar-ring">
-              <div className="k-hero__avatar" aria-hidden="true">
-                <svg viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="24" r="24" fill="url(#avatarBg)" />
-                  <circle cx="24" cy="18" r="7.5" fill="#DCE9F2" />
-                  <path
-                    d="M10 42C10 34.268 16.268 28 24 28C31.732 28 38 34.268 38 42"
-                    fill="#162836"
-                    stroke="#8AB4CC"
-                    strokeWidth="1.5"
-                  />
-                  <defs>
-                    <linearGradient id="avatarBg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#65B8D6" />
-                      <stop offset="100%" stopColor="#1B3B4B" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+          <ScrollReveal variant="fade-right" delay={260}>
+            <div className="k-hero__subright">
+              <div className="k-hero__avatar-ring">
+                <div className="k-hero__avatar" aria-hidden="true">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="24" fill="url(#avatarBg)" />
+                    <circle cx="24" cy="18" r="7.5" fill="#DCE9F2" />
+                    <path
+                      d="M10 42C10 34.268 16.268 28 24 28C31.732 28 38 34.268 38 42"
+                      fill="#162836"
+                      stroke="#8AB4CC"
+                      strokeWidth="1.5"
+                    />
+                    <defs>
+                      <linearGradient id="avatarBg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#65B8D6" />
+                        <stop offset="100%" stopColor="#1B3B4B" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+                <span className="k-hero__avatar-online" />
               </div>
-              <span className="k-hero__avatar-online" />
+              <p className="k-hero__subright-copy">
+                With 24/7 Cloud Automation, We Bring{' '}
+                <strong>All-In-One Resale Command</strong> To Furniture Flippers &amp; Showrooms Nationwide.
+              </p>
             </div>
-            <p className="k-hero__subright-copy">
-              With 24/7 Cloud Automation, We Bring{' '}
-              <strong>All-In-One Resale Command</strong> To Furniture Flippers &amp; Showrooms Nationwide.
-            </p>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
