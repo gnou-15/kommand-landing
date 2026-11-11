@@ -1,10 +1,82 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { HERO_CALLOUTS } from '../../data/kommandrData';
 import './Hero.css';
 
 export function Hero({ onOpenModal }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [boostDisplay, setBoostDisplay] = useState(0);
+  const [clickPulse, setClickPulse] = useState(false);
+
+  const bladeGroupRef = useRef(null);
+  const radarRingRef = useRef(null);
+  const spinStateRef = useRef({
+    angle: 0,
+    boostVelocity: 0,
+    lastTime: null,
+  });
+
   const activeCallout = HERO_CALLOUTS[activeIndex];
+
+  useEffect(() => {
+    let rafId;
+    const BASE_DEG_PER_SEC = 14; // Normal smooth turbine rotation
+
+    const animateTurbine = (timestamp) => {
+      const state = spinStateRef.current;
+      if (state.lastTime === null) {
+        state.lastTime = timestamp;
+      }
+      const dt = Math.min(0.05, (timestamp - state.lastTime) / 1000);
+      state.lastTime = timestamp;
+
+      // Advance turbine angle by base speed + current boost velocity
+      const currentSpeed = BASE_DEG_PER_SEC + state.boostVelocity;
+      state.angle = (state.angle + currentSpeed * dt) % 360;
+
+      if (bladeGroupRef.current) {
+        bladeGroupRef.current.setAttribute(
+          'transform',
+          `rotate(${state.angle.toFixed(2)} 180 180)`
+        );
+      }
+
+      if (radarRingRef.current) {
+        radarRingRef.current.setAttribute(
+          'transform',
+          `rotate(${(-state.angle * 0.45).toFixed(2)} 180 180)`
+        );
+      }
+
+      // Exponential friction decay back to normal spinning
+      if (state.boostVelocity > 0.2) {
+        state.boostVelocity *= Math.pow(0.42, dt);
+        if (state.boostVelocity < 0.5) {
+          state.boostVelocity = 0;
+          setBoostDisplay(0);
+        } else {
+          setBoostDisplay(Math.min(100, Math.round((state.boostVelocity / 1100) * 100)));
+        }
+      }
+
+      rafId = requestAnimationFrame(animateTurbine);
+    };
+
+    rafId = requestAnimationFrame(animateTurbine);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  const handleCoreBoostClick = () => {
+    // Stack boost velocity on every click (up to hyper-spin cap)
+    spinStateRef.current.boostVelocity = Math.min(
+      1400,
+      spinStateRef.current.boostVelocity + 340
+    );
+    setBoostDisplay(
+      Math.min(100, Math.round((spinStateRef.current.boostVelocity / 1100) * 100))
+    );
+    setClickPulse(true);
+    setTimeout(() => setClickPulse(false), 260);
+  };
 
   const handleCycleCallout = () => {
     setActiveIndex((prev) => (prev + 1) % HERO_CALLOUTS.length);
@@ -69,7 +141,12 @@ export function Hero({ onOpenModal }) {
 
           {/* CENTER COLUMN: 3D-Style Glowing Kommandr OS Core / Couch-Command Turbine */}
           <div className="k-hero__center">
-            <div className="k-hero__core-housing">
+            <div
+              className={`k-hero__core-housing ${
+                boostDisplay > 0 ? 'k-hero__core-housing--boosted' : ''
+              }`}
+              style={{ '--boost-intensity': (boostDisplay / 100).toFixed(2) }}
+            >
               {/* Outer Metallic Squircle Chassis (Like the TechCool Cooler Frame) */}
               <div className="k-hero__chassis">
                 <div className="k-hero__chassis-corner k-hero__chassis-corner--tl" />
@@ -116,8 +193,8 @@ export function Hero({ onOpenModal }) {
                       {/* Ambient Fire Chamber */}
                       <circle cx="180" cy="180" r="144" fill="url(#coreFireGlow)" />
 
-                      {/* 11 Precision Radial Scanner Blades */}
-                      <g className="k-hero__blade-group">
+                      {/* 11 Precision Radial Scanner Blades (Driven by Physics RAF) */}
+                      <g ref={bladeGroupRef} className="k-hero__blade-group">
                         {Array.from({ length: 11 }).map((_, idx) => {
                           const angle = idx * (360 / 11);
                           return (
@@ -125,7 +202,7 @@ export function Hero({ onOpenModal }) {
                               <path
                                 d="M168 52 C186 54, 202 82, 196 126 L170 126 C164 88, 158 64, 168 52 Z"
                                 fill="url(#bladeGrad)"
-                                stroke="rgba(255, 120, 68, 0.32)"
+                                stroke="rgba(255, 120, 68, 0.38)"
                                 strokeWidth="1.2"
                               />
                             </g>
@@ -153,63 +230,83 @@ export function Hero({ onOpenModal }) {
                         strokeOpacity="0.85"
                       />
 
-                      {/* Inner Radar Sweep Ring */}
+                      {/* Inner Counter-Rotating Radar Sweep Ring */}
                       <circle
+                        ref={radarRingRef}
                         cx="180"
                         cy="180"
                         r="102"
                         fill="none"
-                        stroke="rgba(255, 158, 102, 0.35)"
-                        strokeWidth="1.5"
+                        stroke="rgba(255, 158, 102, 0.45)"
+                        strokeWidth="1.6"
                         strokeDasharray="10 8"
                       />
 
-                      {/* Center Armored Hub */}
-                      <circle
-                        cx="180"
-                        cy="180"
-                        r="72"
-                        fill="url(#hubMetallic)"
-                        stroke="rgba(230, 182, 76, 0.55)"
-                        strokeWidth="2.5"
-                      />
-                      <circle
-                        cx="180"
-                        cy="180"
-                        r="61"
-                        fill="#0A141C"
-                        stroke="rgba(154, 209, 230, 0.2)"
-                        strokeWidth="1"
-                      />
+                      {/* CLICKABLE CENTER LOGO HUB BUTTON */}
+                      <g
+                        className={`k-hero__core-trigger ${
+                          clickPulse ? 'k-hero__core-trigger--pulse' : ''
+                        }`}
+                        onClick={handleCoreBoostClick}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleCoreBoostClick();
+                          }
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Click to overdrive the Kommandr OS turbine"
+                      >
+                        <title>Click repeatedly to overdrive the Kommandr turbine!</title>
+                        {/* Center Armored Hub */}
+                        <circle
+                          cx="180"
+                          cy="180"
+                          r="72"
+                          fill="url(#hubMetallic)"
+                          stroke={boostDisplay > 15 ? '#FF5520' : 'rgba(230, 182, 76, 0.65)'}
+                          strokeWidth="2.8"
+                          className="k-hero__hub-outer"
+                        />
+                        <circle
+                          cx="180"
+                          cy="180"
+                          r="61"
+                          fill="#0A141C"
+                          stroke="rgba(154, 209, 230, 0.28)"
+                          strokeWidth="1.2"
+                        />
 
-                      {/* Center Embedded Sofa + Rank Chevron Crest */}
-                      <g transform="translate(132, 126) scale(0.8)">
-                        {/* Sofa Back Cushions */}
-                        <path
-                          d="M29 19C29 14.5817 32.5817 11 37 11H54C56.7614 11 59 13.2386 59 16V37H29V19Z"
-                          fill="#4A6475"
-                        />
-                        <path
-                          d="M61 16C61 13.2386 63.2386 11 66 11H83C87.4183 11 91 14.5817 91 19V37H61V16Z"
-                          fill="#243847"
-                        />
-                        {/* Sofa Arms */}
-                        <path
-                          d="M23.5 28.5C19.0817 28.5 15.5 32.0817 15.5 36.5C15.5 40.366 18.2423 43.5899 21.8902 44.3369L23.5 44.6665V56.5H30.5V41.5C30.5 39.2909 32.2909 37.5 34.5 37.5H85.5C87.7091 37.5 89.5 39.2909 89.5 41.5V56.5H96.5V44.6665L98.1098 44.3369C101.758 43.5899 104.5 40.366 104.5 36.5C104.5 32.0817 100.918 28.5 96.5 28.5H92V35.5H28V28.5H23.5Z"
-                          fill="#132533"
-                          stroke="#8AB4CC"
-                          strokeWidth="2"
-                        />
-                        <rect x="33" y="40.5" width="54" height="7" rx="3" fill="#3B5363" />
-                        {/* Star */}
-                        <path
-                          d="M60 49L63.2 58.6H73.3L65.1 64.5L68.3 74.1L60 68.2L51.7 74.1L54.9 64.5L46.7 58.6H56.8L60 49Z"
-                          fill="url(#crestGold)"
-                        />
-                        {/* 3 Gold Rank Chevrons */}
-                        <path d="M23 64L60 91L97 64V73L60 100L23 73V64Z" fill="url(#crestGold)" />
-                        <path d="M23 77L60 104L97 77V86L60 113L23 86V77Z" fill="url(#crestGold)" />
-                        <path d="M23 90L60 117L97 90V98.5L60 125.5L23 98.5V90Z" fill="url(#crestGold)" />
+                        {/* Center Embedded Sofa + Rank Chevron Crest */}
+                        <g transform="translate(132, 126) scale(0.8)">
+                          {/* Sofa Back Cushions */}
+                          <path
+                            d="M29 19C29 14.5817 32.5817 11 37 11H54C56.7614 11 59 13.2386 59 16V37H29V19Z"
+                            fill="#4A6475"
+                          />
+                          <path
+                            d="M61 16C61 13.2386 63.2386 11 66 11H83C87.4183 11 91 14.5817 91 19V37H61V16Z"
+                            fill="#243847"
+                          />
+                          {/* Sofa Arms */}
+                          <path
+                            d="M23.5 28.5C19.0817 28.5 15.5 32.0817 15.5 36.5C15.5 40.366 18.2423 43.5899 21.8902 44.3369L23.5 44.6665V56.5H30.5V41.5C30.5 39.2909 32.2909 37.5 34.5 37.5H85.5C87.7091 37.5 89.5 39.2909 89.5 41.5V56.5H96.5V44.6665L98.1098 44.3369C101.758 43.5899 104.5 40.366 104.5 36.5C104.5 32.0817 100.918 28.5 96.5 28.5H92V35.5H28V28.5H23.5Z"
+                            fill="#132533"
+                            stroke="#8AB4CC"
+                            strokeWidth="2"
+                          />
+                          <rect x="33" y="40.5" width="54" height="7" rx="3" fill="#3B5363" />
+                          {/* Star */}
+                          <path
+                            d="M60 49L63.2 58.6H73.3L65.1 64.5L68.3 74.1L60 68.2L51.7 74.1L54.9 64.5L46.7 58.6H56.8L60 49Z"
+                            fill="url(#crestGold)"
+                          />
+                          {/* 3 Gold Rank Chevrons */}
+                          <path d="M23 64L60 91L97 64V73L60 100L23 73V64Z" fill="url(#crestGold)" />
+                          <path d="M23 77L60 104L97 77V86L60 113L23 86V77Z" fill="url(#crestGold)" />
+                          <path d="M23 90L60 117L97 90V98.5L60 125.5L23 98.5V90Z" fill="url(#crestGold)" />
+                        </g>
                       </g>
                     </svg>
                   </div>
@@ -224,10 +321,21 @@ export function Hero({ onOpenModal }) {
                 <span className="k-hero__connector-line" />
               </div>
 
-              {/* Rock / Platform Pedestal Shadow Base */}
-              <div className="k-hero__pedestal-base" aria-hidden="true">
-                <span className="k-hero__pedestal-status">KOMMANDR CORE v4.2 • CLOUD SNIPER ACTIVE</span>
-              </div>
+              {/* Rock / Platform Pedestal Shadow Base with Live RPM Telemetry */}
+              <button
+                type="button"
+                className={`k-hero__pedestal-base ${
+                  boostDisplay > 0 ? 'k-hero__pedestal-base--overdrive' : ''
+                }`}
+                onClick={handleCoreBoostClick}
+                title="Click center crest to boost turbine RPM"
+              >
+                <span className="k-hero__pedestal-status">
+                  {boostDisplay > 0
+                    ? `⚡ OVERDRIVE BOOST ${boostDisplay}% • ${1200 + boostDisplay * 48} RPM`
+                    : 'KOMMANDR CORE v4.2 • CLICK CREST TO BOOST'}
+                </span>
+              </button>
             </div>
           </div>
 

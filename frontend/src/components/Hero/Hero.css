@@ -279,6 +279,14 @@
   box-shadow:
     inset 0 0 38px rgba(255, 69, 0, 0.72),
     0 0 32px rgba(255, 85, 32, 0.42);
+  transition: box-shadow 0.25s ease;
+}
+
+.k-hero__core-housing--boosted .k-hero__ember-chamber {
+  box-shadow:
+    inset 0 0 58px rgba(255, 85, 32, 0.95),
+    0 0 calc(36px + 42px * var(--boost-intensity, 0.5)) rgba(255, 85, 32, 0.78),
+    0 0 calc(20px + 30px * var(--boost-intensity, 0.5)) rgba(255, 214, 102, 0.45);
 }
 
 .k-hero__turbine-svg {
@@ -288,17 +296,35 @@
 }
 
 .k-hero__blade-group {
-  transform-origin: 180px 180px;
-  animation: kSpinBlades 36s linear infinite;
-}
-
-@keyframes kSpinBlades {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  will-change: transform;
 }
 
 .k-hero__neon-ring {
   filter: drop-shadow(0 0 10px #ff5520) drop-shadow(0 0 22px #ff3d00);
+  transition: filter 0.2s ease;
+}
+
+.k-hero__core-housing--boosted .k-hero__neon-ring {
+  filter: drop-shadow(0 0 16px #ff7043) drop-shadow(0 0 32px #ff3d00);
+}
+
+/* Interactive Center Crest Trigger Button */
+.k-hero__core-trigger {
+  cursor: pointer;
+  transform-origin: 180px 180px;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s ease;
+  outline: none;
+}
+
+.k-hero__core-trigger:hover {
+  transform: scale(1.045);
+  filter: drop-shadow(0 0 16px rgba(230, 182, 76, 0.55));
+}
+
+.k-hero__core-trigger:active,
+.k-hero__core-trigger--pulse {
+  transform: scale(0.95);
+  filter: drop-shadow(0 0 24px rgba(255, 85, 32, 0.9));
 }
 
 /* Glowing Connector Line from Center Core to Right Card */
@@ -341,11 +367,23 @@
 
 .k-hero__pedestal-base {
   margin-top: 1.1rem;
-  padding: 0.38rem 1rem;
+  padding: 0.42rem 1.1rem;
   border-radius: 999px;
   background: rgba(9, 17, 24, 0.78);
   border: 1px solid rgba(230, 182, 76, 0.28);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.k-hero__pedestal-base:hover {
+  border-color: rgba(230, 182, 76, 0.65);
+}
+
+.k-hero__pedestal-base--overdrive {
+  border-color: #ff5520;
+  background: linear-gradient(90deg, rgba(45, 18, 12, 0.9), rgba(18, 28, 36, 0.9));
+  box-shadow: 0 0 24px rgba(255, 85, 32, 0.45);
 }
 
 .k-hero__pedestal-status {
@@ -353,6 +391,10 @@
   font-size: 0.68rem;
   letter-spacing: 0.1em;
   color: rgba(230, 182, 76, 0.9);
+}
+
+.k-hero__pedestal-base--overdrive .k-hero__pedestal-status {
+  color: #ffe082;
 }
 
 /* RIGHT COLUMN: Frosted Glass Callout Card + Spec Footer */
