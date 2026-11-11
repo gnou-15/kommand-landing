@@ -1,0 +1,127 @@
+name: Continuous Integration (CI) Pipeline
+
+on:
+  push:
+    branches: [ main, 'feature/*', 'fix/*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 1 — Frontend CI (React 19 / Vite 8 / ESLint / Unit Tests / Prod Bundle)
+  # ─────────────────────────────────────────────────────────────────────────────
+  frontend-ci:
+    name: Frontend (React / Vite)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint Static Analysis
+        run: npm run lint
+
+      - name: Run Frontend Data & Pricing Integrity Unit Tests
+        run: npm test
+
+      - name: Build Frontend (Production Bundle)
+        run: npm run build
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 2 — Backend Node.js CI (Health & Sniper Profit Engine API Tests)
+  # ─────────────────────────────────────────────────────────────────────────────
+  backend-node-ci:
+    name: Backend Node.js (Kommandr API)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Backend Endpoint & Profit Calculation Unit Tests
+        run: npm test
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 3 — Docker Image Build Verification (Frontend & Backend Containers)
+  # ─────────────────────────────────────────────────────────────────────────────
+  docker-build:
+    name: Docker Image Build Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Frontend Container Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: false
+          tags: kommandros-frontend:test
+
+      - name: Build Node Backend Container Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: false
+          tags: kommandros-backend:test
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 4 — Dependency Vulnerability & Security Audit
+  # ─────────────────────────────────────────────────────────────────────────────
+  security-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Audit Frontend Dependencies
+        working-directory: ./frontend
+        run: npm audit --audit-level=high || true
+
+      - name: Audit Backend Dependencies
+        working-directory: ./backend
+        run: npm audit --audit-level=high || true
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 5 — CI Pipeline Quality Gate Summary
+  # ─────────────────────────────────────────────────────────────────────────────
+  ci-summary:
+    name: CI Pipeline Quality Gate
+    needs: [frontend-ci, backend-node-ci, docker-build, security-scan]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Verify All Parallel Jobs Passed
+        run: |
+          if [ "${{ needs.frontend-ci.result }}" != "success" ] || \
+             [ "${{ needs.backend-node-ci.result }}" != "success" ] || \
+             [ "${{ needs.docker-build.result }}" != "success" ] || \
+             [ "${{ needs.security-scan.result }}" != "success" ]; then
+            echo "❌ One or more CI jobs failed!"
+            exit 1
+          fi
+          echo "✅ All Kommandr OS CI parallel jobs passed successfully!"
+

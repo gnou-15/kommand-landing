@@ -1,0 +1,224 @@
+name: Continuous Delivery (CD) Pipeline
+
+on:
+  workflow_run:
+    workflows: ["Continuous Integration (CI) Pipeline"]
+    types:
+      - completed
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+env:
+  IMAGE_FRONTEND: ghcr.io/${{ github.repository_owner }}/kommandros/frontend
+  IMAGE_BACKEND: ghcr.io/${{ github.repository_owner }}/kommandros/backend
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # STEP 1 — Build & Publish Docker Images to GHCR
+  # Only executes if the CI pipeline completed with 100% success!
+  # ─────────────────────────────────────────────────────────────────────────────
+  build-and-push-artifacts:
+    name: Deployment Automation (Build & Publish Artifacts)
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata & semantic tags for Frontend
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_FRONTEND }}
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || github.event.workflow_run.head_branch == 'main' }}
+            type=semver,pattern={{version}}
+            type=sha,prefix=sha-
+
+      - name: Build & Push Frontend Container Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata & semantic tags for Node Backend
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_BACKEND }}
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || github.event.workflow_run.head_branch == 'main' }}
+            type=semver,pattern={{version}}
+            type=sha,prefix=sha-
+
+      - name: Build & Push Node Backend Container Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # STEP 2 — Container Security Scanning (Trivy)
+  # ─────────────────────────────────────────────────────────────────────────────
+  container-security-scan:
+    name: Container Security Scanning (Trivy)
+    needs: [build-and-push-artifacts]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Scan Frontend Container for Vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGE_FRONTEND }}:latest
+          format: "table"
+          exit-code: "0"
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+
+      - name: Scan Backend Container for Vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGE_BACKEND }}:latest
+          format: "table"
+          exit-code: "0"
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # STEP 3 — End-to-End Validation Gate
+  # Starts containers and validates live endpoints before deployment trigger
+  # ─────────────────────────────────────────────────────────────────────────────
+  end-to-end-validation-gate:
+    name: End-to-End Validation & Health Gate
+    needs: [build-and-push-artifacts]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull and Run Frontend Container
+        run: |
+          docker run -d --name frontend-health-check -p 8080:80 ${{ env.IMAGE_FRONTEND }}:latest
+          sleep 4
+
+      - name: Pull and Run Node Backend Container
+        run: |
+          docker run -d --name backend-health-check -p 5000:5000 ${{ env.IMAGE_BACKEND }}:latest
+          sleep 4
+
+      - name: Verify Frontend Serving Kommandr OS Bundle
+        run: |
+          HTML=$(curl -s http://localhost:8080)
+          if [[ "$HTML" == *"Kommandr OS"* ]]; then
+            echo "✅ Frontend Container Health Validation Passed!"
+          else
+            echo "❌ Frontend Container Health Validation Failed!"
+            exit 1
+          fi
+
+      - name: Verify Node Backend Health Endpoint
+        run: |
+          RESPONSE=$(curl -s http://localhost:5000/health)
+          echo "Backend Health Check Response: $RESPONSE"
+          if [[ "$RESPONSE" == *"online"* ]]; then
+            echo "✅ Node Backend Health Validation Passed!"
+          else
+            echo "❌ Node Backend Health Validation Failed!"
+            exit 1
+          fi
+
+      - name: Smoke Test — Sniper Profit & Tax Set-Aside Endpoint Validation
+        run: |
+          RESPONSE=$(curl -s --max-time 15 -X POST http://localhost:5000/api/sniper/calculate-profit \
+            -H "Content-Type: application/json" \
+            -d '{"sourcePrice":220,"estimatedResale":1250,"expenses":75,"taxRate":0.20}')
+
+          echo "Sniper Profit Smoke Test Response: $RESPONSE"
+
+          if echo "$RESPONSE" | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          assert data.get('status') == 'verified', f'Expected verified status. Got: {data}'
+          assert data.get('netProfit') == 764, f'Expected netProfit 764. Got: {data.get(\"netProfit\")}'
+          assert data.get('taxSetAside') == 191, f'Expected taxSetAside 191. Got: {data.get(\"taxSetAside\")}'
+          print('✅ Sniper Profit endpoint schema validation passed')
+          print(f'   netProfit={data[\"netProfit\"]}, taxSetAside={data[\"taxSetAside\"]}')
+          "; then
+            echo "✅ Sniper Profit Smoke Test Passed!"
+          else
+            echo "❌ Sniper Profit Smoke Test Failed! See response above."
+            exit 1
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # STEP 4 — Production Deployment & Live Post-Verification
+  # ─────────────────────────────────────────────────────────────────────────────
+  post-deployment-verification:
+    name: Production Deployment & Live Post-Verification
+    needs: [end-to-end-validation-gate]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Production Deployment Webhooks (Vercel & Render)
+        env:
+          BACKEND_HOOK: "${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}"
+          VERCEL_HOOK: "${{ secrets.VERCEL_DEPLOY_HOOK }}"
+        run: |
+          if [ -n "$BACKEND_HOOK" ]; then
+            echo "🚀 Triggering Render Backend Deployment..."
+            curl -s -X POST "$BACKEND_HOOK"
+          else
+            echo "ℹ️ RENDER_BACKEND_DEPLOY_HOOK secret not set. Skipping webhook trigger."
+          fi
+
+          if [ -n "$VERCEL_HOOK" ]; then
+            echo "🚀 Triggering Vercel Frontend Deployment..."
+            curl -s -X POST "$VERCEL_HOOK"
+          else
+            echo "ℹ️ VERCEL_DEPLOY_HOOK secret not set. (Using standard Vercel Git integration)"
+          fi
+
+      - name: Verify Live Production Domain
+        env:
+          PRODUCTION_URL: "${{ vars.PRODUCTION_URL || 'https://www.kommandros.com' }}"
+        run: |
+          echo "🌐 Performing Post-Deployment Verification ping against $PRODUCTION_URL..."
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$PRODUCTION_URL" || true)
+          echo "Live Domain HTTP Status Code: $RESPONSE"
+          if [ "$RESPONSE" -eq 200 ] || [ "$RESPONSE" -eq 301 ] || [ "$RESPONSE" -eq 302 ]; then
+            echo "✅ Live Production Domain ($PRODUCTION_URL) Verified Successfully!"
+          else
+            echo "⚠️ Production domain returned status code $RESPONSE. Verification logged."
+          fi
