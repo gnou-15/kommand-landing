@@ -1,0 +1,89 @@
+/* Kommandr OS Splash Cover Screen — Matching Resora & Safira 850ms Carved Press-Down Effect */
+
+.kommandr-splash-cover {
+  z-index: 99999;
+  background:
+    radial-gradient(900px 420px at 50% 50%, rgba(76, 126, 152, 0.22) 0%, rgba(255, 85, 32, 0.08) 45%, transparent 75%),
+    linear-gradient(180deg, #162632 0%, #0b141c 55%, #070b0f 100%);
+  will-change: opacity, transform;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  inset: 0;
+  pointer-events: auto;
+  user-select: none;
+  opacity: 1;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kommandr-splash-cover.splash-fade-out {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.03);
+}
+
+.kommandr-splash-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.kommandr-press-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px;
+  border-radius: 36px;
+}
+
+/* Standalone Kommandr Crest Logo — Carved Pressed-Down Inside Animation (600ms press + 250ms fade) */
+.kommandr-press-logo {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: center center;
+  animation: kommandrCarvedPressIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Override hover transform on logo inside splash so press animation is pure */
+.kommandr-press-logo .kommandr-logo__mark {
+  filter: none;
+}
+
+@keyframes kommandrCarvedPressIn {
+  0% {
+    transform: scale(1) translateY(0);
+    filter:
+      drop-shadow(0 16px 32px rgba(255, 85, 32, 0.38))
+      drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6))
+      brightness(1.08);
+  }
+
+  45%,
+  75% {
+    /* Pressed Down INSIDE the slate surface: Carved dark top-left inner shadow + bright bottom-right rim highlight */
+    transform: scale(0.88) translateY(5px);
+    filter:
+      drop-shadow(-3px -3px 4px rgba(0, 0, 0, 0.88))
+      drop-shadow(2px 2.5px 1.5px rgba(154, 209, 230, 0.55))
+      drop-shadow(0px 2px 6px rgba(230, 182, 76, 0.28))
+      brightness(0.92)
+      contrast(1.12);
+  }
+
+  100% {
+    transform: scale(0.92) translateY(2.5px);
+    filter:
+      drop-shadow(-2px -2px 3px rgba(0, 0, 0, 0.72))
+      drop-shadow(1.5px 1.5px 1px rgba(255, 224, 130, 0.45))
+      drop-shadow(0 6px 18px rgba(255, 85, 32, 0.3));
+  }
+}
+
