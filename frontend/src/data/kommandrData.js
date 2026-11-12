@@ -5,8 +5,8 @@
 
 export const NAV_LINKS = [
   { label: 'Command Center', href: '#command-center' },
-  { label: 'Deal Sniper', href: '#live-simulator' },
-  { label: '6-Step Lifecycle', href: '#lifecycle' },
+  { label: 'How it Works', href: '#lifecycle' },
+  { label: 'Connected Tools', href: '#live-simulator' },
   { label: 'Kommandr vs. All', href: '#comparison' },
   { label: 'Pricing', href: '#pricing' },
 ];

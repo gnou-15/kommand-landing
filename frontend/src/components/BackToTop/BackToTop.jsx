@@ -43,9 +43,9 @@ export function BackToTop() {
       <svg className="k-back-to-top__ring" viewBox="0 0 48 48" aria-hidden="true">
         <defs>
           <linearGradient id="kBackTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFE082" />
-            <stop offset="50%" stopColor="#E6B64C" />
-            <stop offset="100%" stopColor="#FF5520" />
+            <stop offset="0%" stopColor="#E0F2FE" />
+            <stop offset="50%" stopColor="#7DD3FC" />
+            <stop offset="100%" stopColor="#38BDF8" />
           </linearGradient>
         </defs>
         <circle
@@ -82,7 +82,7 @@ export function BackToTop() {
           />
           <path
             d="M7 17.5L12 12.5L17 17.5"
-            stroke="#E6B64C"
+            stroke="#7DD3FC"
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"

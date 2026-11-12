@@ -15,6 +15,10 @@ html {
   color-scheme: dark;
 }
 
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
@@ -23,6 +27,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: background-color 0.55s ease, color 0.45s ease;
+}
+
+html[data-theme="light"] body {
+  background-color: #f4f2ed;
+  color: #0b141c;
 }
 
 /* Shared Section Typography Utilities */
@@ -40,14 +50,27 @@ body {
   letter-spacing: 0.1em;
   color: #9ad1e6;
   margin-bottom: 1.1rem;
+  transition: background-color 0.45s ease, color 0.45s ease, border-color 0.45s ease;
+}
+
+[data-theme="light"] .k-section-tag {
+  background: #f4f2ed;
+  border-color: rgba(11, 20, 28, 0.12);
+  box-shadow: 6px 6px 14px #d6d3cc, -6px -6px 14px #ffffff;
+  color: #0369a1;
 }
 
 .k-section-tag__dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #ff5520;
-  box-shadow: 0 0 10px #ff5520;
+  background: #7dd3fc;
+  box-shadow: 0 0 10px rgba(125, 211, 252, 0.8);
+}
+
+[data-theme="light"] .k-section-tag__dot {
+  background: #0284c7;
+  box-shadow: 0 0 8px rgba(2, 132, 199, 0.5);
 }
 
 .k-section-title {
@@ -58,10 +81,21 @@ body {
   letter-spacing: -0.025em;
   color: #ffffff;
   margin: 0 0 1rem;
+  transition: color 0.45s ease;
+}
+
+[data-theme="light"] .k-section-title {
+  color: #0b141c;
 }
 
 .k-text-gradient {
-  background: linear-gradient(92deg, #ffe082 0%, #ff7043 52%, #9ad1e6 100%);
+  background: linear-gradient(92deg, #ffffff 0%, #c2d6e3 48%, #7dd3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .k-text-gradient {
+  background: linear-gradient(92deg, #0b141c 0%, #1e425e 48%, #0284c7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -71,4 +105,9 @@ body {
   line-height: 1.65;
   color: rgba(210, 226, 236, 0.74);
   margin: 0 auto;
+  transition: color 0.45s ease;
+}
+
+[data-theme="light"] .k-section-subtitle {
+  color: #425466;
 }

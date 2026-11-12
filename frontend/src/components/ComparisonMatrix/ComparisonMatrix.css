@@ -50,9 +50,9 @@
 }
 
 .k-comp__th-kommandr {
-  background: linear-gradient(180deg, rgba(230, 182, 76, 0.18), rgba(255, 85, 32, 0.08));
-  border-left: 1px solid rgba(230, 182, 76, 0.35);
-  border-right: 1px solid rgba(230, 182, 76, 0.35);
+  background: linear-gradient(180deg, rgba(125, 211, 252, 0.16), rgba(48, 86, 108, 0.12));
+  border-left: 1px solid rgba(154, 209, 230, 0.4);
+  border-right: 1px solid rgba(154, 209, 230, 0.4);
   width: 26%;
 }
 
@@ -64,8 +64,9 @@
   letter-spacing: 0.08em;
   padding: 0.18rem 0.55rem;
   border-radius: 999px;
-  color: #081017;
-  background: linear-gradient(90deg, #ffe082, #ff7043);
+  color: #e0f2fe;
+  background: linear-gradient(135deg, rgba(48, 86, 108, 0.8), rgba(20, 39, 52, 0.95));
+  border: 1px solid rgba(154, 209, 230, 0.5);
   margin-bottom: 0.35rem;
 }
 
@@ -91,9 +92,9 @@
 }
 
 .k-comp__td-kommandr {
-  background: rgba(230, 182, 76, 0.06);
-  border-left: 1px solid rgba(230, 182, 76, 0.28);
-  border-right: 1px solid rgba(230, 182, 76, 0.28);
+  background: rgba(125, 211, 252, 0.06);
+  border-left: 1px solid rgba(154, 209, 230, 0.28);
+  border-right: 1px solid rgba(154, 209, 230, 0.28);
   font-weight: 600;
   font-size: 0.9rem;
   color: #ffffff;
@@ -132,9 +133,9 @@
 }
 
 .k-comp__foot-kommandr {
-  background: linear-gradient(180deg, rgba(230, 182, 76, 0.14), rgba(255, 85, 32, 0.16));
-  border-left: 1px solid rgba(230, 182, 76, 0.4);
-  border-right: 1px solid rgba(230, 182, 76, 0.4);
+  background: linear-gradient(180deg, rgba(125, 211, 252, 0.14), rgba(48, 86, 108, 0.22));
+  border-left: 1px solid rgba(154, 209, 230, 0.42);
+  border-right: 1px solid rgba(154, 209, 230, 0.42);
 }
 
 .k-comp__price-main {
@@ -142,7 +143,7 @@
   font-family: var(--font-display);
   font-size: 1.55rem;
   font-weight: 700;
-  color: #ffe082;
+  color: #e0f2fe;
 }
 
 .k-comp__price-sub {
@@ -168,4 +169,93 @@
     padding: 4.5rem 1.25rem;
   }
 }
+
+/* ============================================================
+   LIGHT MODE OVERRIDES
+   ============================================================ */
+[data-theme="light"] .k-comp {
+  background:
+    radial-gradient(900px 450px at 50% 10%, rgba(2, 132, 199, 0.05), transparent 75%),
+    linear-gradient(180deg, #e9e5de 0%, #f4f2ed 50%, #ece9e2 100%);
+  border-top-color: rgba(11, 20, 28, 0.08);
+}
+
+[data-theme="light"] .k-comp__table-wrap {
+  background: #f4f2ed;
+  border-color: rgba(11, 20, 28, 0.1);
+  box-shadow:
+    16px 16px 34px #d6d3cc,
+    -16px -16px 34px #ffffff;
+}
+
+[data-theme="light"] .k-comp__table th,
+[data-theme="light"] .k-comp__table td {
+  border-bottom-color: rgba(11, 20, 28, 0.08);
+}
+
+[data-theme="light"] .k-comp__th-feature {
+  color: #0369a1;
+}
+
+[data-theme="light"] .k-comp__th-kommandr {
+  background: linear-gradient(180deg, rgba(2, 132, 199, 0.11), rgba(2, 132, 199, 0.05));
+  border-left-color: rgba(2, 132, 199, 0.3);
+  border-right-color: rgba(2, 132, 199, 0.3);
+}
+
+[data-theme="light"] .k-comp__badge-top {
+  background: #0b141c;
+  color: #ffffff;
+  border-color: rgba(11, 20, 28, 0.2);
+}
+
+[data-theme="light"] .k-comp__brand-col,
+[data-theme="light"] .k-comp__td-feature,
+[data-theme="light"] .k-comp__td-kommandr,
+[data-theme="light"] .k-comp__foot-label {
+  color: #0b141c;
+}
+
+[data-theme="light"] .k-comp__td-kommandr {
+  background: rgba(2, 132, 199, 0.05);
+  border-left-color: rgba(2, 132, 199, 0.24);
+  border-right-color: rgba(2, 132, 199, 0.24);
+}
+
+[data-theme="light"] .k-comp__check {
+  background: rgba(5, 150, 105, 0.15);
+  color: #047857;
+}
+
+[data-theme="light"] .k-comp__th-other,
+[data-theme="light"] .k-comp__td-other {
+  color: #425466;
+}
+
+[data-theme="light"] .k-comp__cross {
+  color: #dc2626;
+}
+
+[data-theme="light"] .k-comp__foot-kommandr {
+  background: linear-gradient(180deg, rgba(2, 132, 199, 0.09), rgba(2, 132, 199, 0.16));
+  border-left-color: rgba(2, 132, 199, 0.32);
+  border-right-color: rgba(2, 132, 199, 0.32);
+}
+
+[data-theme="light"] .k-comp__price-main {
+  color: #0369a1;
+}
+
+[data-theme="light"] .k-comp__price-sub {
+  color: #334e68;
+}
+
+[data-theme="light"] .k-comp__foot-other span {
+  color: #1e3344;
+}
+
+[data-theme="light"] .k-comp__foot-other small {
+  color: #52667a;
+}
+
 

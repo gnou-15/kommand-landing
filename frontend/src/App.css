@@ -3,6 +3,11 @@
   display: flex;
   flex-direction: column;
   background: #070b0f;
+  transition: background-color 0.55s ease, color 0.45s ease;
+}
+
+[data-theme="light"] .k-app {
+  background: #f4f2ed;
 }
 
 .k-app__main {

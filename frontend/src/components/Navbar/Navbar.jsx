@@ -6,7 +6,6 @@ import './Navbar.css';
 export function Navbar({ onOpenModal }) {
   const [scrolled, setScrolled] = useState(false);
   const [retracted, setRetracted] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -18,7 +17,7 @@ export function Navbar({ onOpenModal }) {
 
       if (currentY <= 80) {
         setRetracted(false);
-      } else if (delta > 6 && !menuOpen) {
+      } else if (delta > 6) {
         // Scrolling down past threshold -> retract header
         setRetracted(true);
       } else if (delta < -4) {
@@ -31,7 +30,7 @@ export function Navbar({ onOpenModal }) {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [menuOpen]);
+  }, []);
 
   return (
     <header
@@ -44,50 +43,37 @@ export function Navbar({ onOpenModal }) {
           <KommandrLogo size={38} showText={true} />
         </a>
 
-        <nav className={`k-navbar__nav ${menuOpen ? 'k-navbar__nav--open' : ''}`} aria-label="Primary Navigation">
+        <nav className="k-navbar__nav" aria-label="Primary Navigation">
           {NAV_LINKS.map((item) => (
             <a
               key={item.href}
               href={item.href}
               className="k-navbar__link"
-              onClick={() => setMenuOpen(false)}
             >
               {item.label}
             </a>
           ))}
-          <div className="k-navbar__mobile-cta">
-            <button
-              type="button"
-              className="k-navbar__cta-btn"
-              onClick={() => {
-                setMenuOpen(false);
-                onOpenModal('Start Free Trial');
-              }}
-            >
-              Start Free Trial
-            </button>
-          </div>
         </nav>
 
         <div className="k-navbar__actions">
-          <button
-            type="button"
-            className="k-navbar__pill-action"
-            onClick={() => onOpenModal('Start Free Trial')}
+          <a
+            href="#login"
+            className="k-navbar__login-link"
+            onClick={(e) => {
+              e.preventDefault();
+              onOpenModal('Log In — Kommandr OS');
+            }}
           >
-            <span className="k-navbar__status-dot" />
-            <span>Launch OS</span>
-          </button>
+            Login
+          </a>
 
           <button
             type="button"
-            className={`k-navbar__hamburger ${menuOpen ? 'k-navbar__hamburger--active' : ''}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle Navigation Drawer"
-            aria-expanded={menuOpen}
+            className="k-navbar__signin-btn"
+            onClick={() => onOpenModal('Start Free — Kommandr OS')}
           >
-            <span className="k-navbar__bar" />
-            <span className="k-navbar__bar" />
+            <span className="k-navbar__signin-shimmer" aria-hidden="true" />
+            <span className="k-navbar__signin-text">Start Free</span>
           </button>
         </div>
       </div>

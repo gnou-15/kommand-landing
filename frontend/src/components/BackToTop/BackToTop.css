@@ -11,7 +11,7 @@
   background: linear-gradient(145deg, rgba(24, 45, 58, 0.85) 0%, rgba(9, 18, 25, 0.92) 100%);
   box-shadow:
     0 14px 32px rgba(0, 0, 0, 0.65),
-    0 0 20px rgba(255, 85, 32, 0.18),
+    0 0 20px rgba(125, 211, 252, 0.16),
     inset 0 1px 1px rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -39,10 +39,10 @@
 
 .k-back-to-top:hover {
   transform: translateY(-4px) scale(1.05);
-  border-color: rgba(230, 182, 76, 0.75);
+  border-color: rgba(154, 209, 230, 0.78);
   box-shadow:
     0 18px 36px rgba(0, 0, 0, 0.75),
-    0 0 26px rgba(255, 85, 32, 0.42),
+    0 0 26px rgba(125, 211, 252, 0.4),
     inset 0 1px 1px rgba(255, 255, 255, 0.35);
 }
 
@@ -90,4 +90,28 @@
     height: 46px;
   }
 }
+
+/* ============================================================
+   LIGHT MODE OVERRIDES
+   ============================================================ */
+[data-theme="light"] .k-back-to-top {
+  background: #f4f2ed;
+  border-color: rgba(11, 20, 28, 0.12);
+  color: #0b141c;
+  box-shadow:
+    8px 8px 18px #cbc8c0,
+    -8px -8px 18px #ffffff;
+}
+
+[data-theme="light"] .k-back-to-top:hover {
+  border-color: rgba(2, 132, 199, 0.55);
+  box-shadow:
+    10px 10px 22px #c2bfba,
+    -8px -8px 18px #ffffff;
+}
+
+[data-theme="light"] .k-back-to-top__track {
+  stroke: rgba(11, 20, 28, 0.1);
+}
+
 
